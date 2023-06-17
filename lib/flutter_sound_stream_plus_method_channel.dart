@@ -19,13 +19,13 @@ class MethodChannelFlutterSoundStreamPlus extends FlutterSoundStreamPlusPlatform
     methodChannel.setMethodCallHandler(
       (call) {
         switch (call.method) {
-          case "RecorderEvent":
+          case "recorderEvent":
             recorderEventListener?.call(call.arguments);
             break;
-          case "PlayerEvent":
+          case "playerEvent":
             playerEventListener?.call(call.arguments);
             break;
-          case "PlatformEvent":
+          case "platformEvent":
             recorderEventListener?.call(call.arguments);
             playerEventListener?.call(call.arguments);
             break;

@@ -44,7 +44,7 @@ class HelperMethods {
         return audioBuffer
     }
 
-    static func 	(_ buffer: AVAudioPCMBuffer, from: AVAudioFormat, to: AVAudioFormat) -> AVAudioPCMBuffer {
+    static func convertBufferFormat(_ buffer: AVAudioPCMBuffer, from: AVAudioFormat, to: AVAudioFormat) -> AVAudioPCMBuffer {
         let formatConverter = AVAudioConverter(from: from, to: to)
         let ratio = Float(from.sampleRate) / Float(to.sampleRate)
         let pcmBuffer = AVAudioPCMBuffer(pcmFormat: to, frameCapacity: UInt32(Float(buffer.frameCapacity) / ratio))!

@@ -3,24 +3,24 @@ import Flutter
 import UIKit
 
 public enum SoundStreamErrors: String {
-    case FailedToRecord
-    case FailedToPlay
-    case FailedToStop
-    case FailedToWriteBuffer
-    case Unknown
+    case failedToRecord
+    case failedToPlay
+    case failedToStop
+    case failedToWriteBuffer
+    case unknown
 }
 
 public enum SoundStreamStatus: String {
-    case Unset
-    case Initialized
-    case Playing
-    case Stopped
+    case unset
+    case initialized
+    case playing
+    case stopped
 }
 
 public enum EventType: String {
-    case RecorderEvent
-    case PlayerEvent
-    case PlatformEvent
+    case recorderEvent
+    case playerEvent
+    case platformEvent
 }
 
 public class FlutterSoundStreamPlusPlugin: NSObject, FlutterPlugin {
@@ -102,7 +102,7 @@ public class FlutterSoundStreamPlusPlugin: NSObject, FlutterPlugin {
         channel.invokeMethod(method, arguments: arguments)
     }
 
-    private func sendEventMethod(name: String, data: Any, eventType: EventType = .PlatformEvent) {
+    private func sendEventMethod(name: String, data: Any, eventType: EventType = .platformEvent) {
         var eventData: [String: Any] = [:]
         eventData["name"] = name
         eventData["data"] = data
@@ -176,19 +176,19 @@ public class FlutterSoundStreamPlusPlugin: NSObject, FlutterPlugin {
     }
 
     private func sendPlayerStatus(_ status: SoundStreamStatus) {
-        sendEventMethod(name: "playerStatus", data: status.rawValue, eventType: .PlayerEvent)
+        sendEventMethod(name: "playerStatus", data: status.rawValue, eventType: .playerEvent)
     }
 
     // MARK: Recorder methods
 
     private func sendRecorderStatus(_ status: SoundStreamStatus) {
-        sendEventMethod(name: "recorderStatus", data: status.rawValue, eventType: .RecorderEvent)
+        sendEventMethod(name: "recorderStatus", data: status.rawValue, eventType: .recorderEvent)
     }
 
     private func initializeRecorder(_ call: FlutterMethodCall, _ result: @escaping FlutterResult) {
         guard let argsArr = call.arguments as? [String: AnyObject]
         else {
-            result(FlutterError(code: SoundStreamErrors.Unknown.rawValue,
+            result(FlutterError(code: SoundStreamErrors.unknown.rawValue,
                                 message: "Incorrect parameters",
                                 details: nil))
             return
@@ -199,10 +199,10 @@ public class FlutterSoundStreamPlusPlugin: NSObject, FlutterPlugin {
 
         checkAndRequestPermission { isGranted in
             if isGranted {
-                self.sendRecorderStatus(SoundStreamStatus.Initialized)
+                self.sendRecorderStatus(SoundStreamStatus.initialized)
                 result(true)
             } else {
-                result(FlutterError(code: SoundStreamErrors.Unknown.rawValue,
+                result(FlutterError(code: SoundStreamErrors.unknown.rawValue,
                                     message: "Incorrect parameters",
                                     details: nil))
             }
@@ -212,13 +212,13 @@ public class FlutterSoundStreamPlusPlugin: NSObject, FlutterPlugin {
     private func startRecording(_ result: @escaping FlutterResult) {
         resetEngineForRecord()
         startEngine()
-        sendRecorderStatus(SoundStreamStatus.Playing)
+        sendRecorderStatus(SoundStreamStatus.playing)
         result(true)
     }
 
     private func stopRecording(_ result: @escaping FlutterResult) {
         mAudioEngine.inputNode.removeTap(onBus: mRecordBus)
-        sendRecorderStatus(SoundStreamStatus.Stopped)
+        sendRecorderStatus(SoundStreamStatus.stopped)
         result(true)
     }
 
@@ -250,7 +250,7 @@ public class FlutterSoundStreamPlusPlugin: NSObject, FlutterPlugin {
 
     private func sendMicData(_ data: [UInt8]) {
         let channelData = FlutterStandardTypedData(bytes: NSData(bytes: data, length: data.count) as Data)
-        sendEventMethod(name: "dataPeriod", data: channelData, , eventType: .RecorderEvent)
+        sendEventMethod(name: "dataPeriod", data: channelData, eventType: .recorderEvent)
     }
 
     // MARK: Player methods
@@ -258,7 +258,7 @@ public class FlutterSoundStreamPlusPlugin: NSObject, FlutterPlugin {
     private func initializePlayer(_ call: FlutterMethodCall, _ result: @escaping FlutterResult) {
         guard let argsArr = call.arguments as? [String: AnyObject]
         else {
-            result(FlutterError(code: SoundStreamErrors.Unknown.rawValue,
+            result(FlutterError(code: SoundStreamErrors.unknown.rawValue,
                                 message: "Incorrect parameters",
                                 details: nil))
             return
@@ -266,7 +266,7 @@ public class FlutterSoundStreamPlusPlugin: NSObject, FlutterPlugin {
         mPlayerSampleRate = argsArr["sampleRate"] as? Double ?? mPlayerSampleRate
         debugLogging = argsArr["showLogs"] as? Bool ?? debugLogging
         mPlayerInputFormat = AVAudioFormat(commonFormat: AVAudioCommonFormat.pcmFormatInt16, sampleRate: mPlayerSampleRate, channels: 1, interleaved: true)
-        sendPlayerStatus(SoundStreamStatus.Initialized)
+        sendPlayerStatus(SoundStreamStatus.initialized)
     }
 
     private func startPlayer(_ result: @escaping FlutterResult) {
@@ -274,7 +274,7 @@ public class FlutterSoundStreamPlusPlugin: NSObject, FlutterPlugin {
         if !mPlayerNode.isPlaying {
             mPlayerNode.play()
         }
-        sendPlayerStatus(SoundStreamStatus.Playing)
+        sendPlayerStatus(SoundStreamStatus.playing)
         result(true)
     }
 
@@ -282,7 +282,7 @@ public class FlutterSoundStreamPlusPlugin: NSObject, FlutterPlugin {
         if mPlayerNode.isPlaying {
             mPlayerNode.stop()
         }
-        sendPlayerStatus(SoundStreamStatus.Stopped)
+        sendPlayerStatus(SoundStreamStatus.stopped)
         result(true)
     }
 
@@ -290,7 +290,7 @@ public class FlutterSoundStreamPlusPlugin: NSObject, FlutterPlugin {
         guard let argsArr = call.arguments as? [String: AnyObject],
               let data = argsArr["data"] as? FlutterStandardTypedData
         else {
-            result(FlutterError(code: SoundStreamErrors.FailedToWriteBuffer.rawValue,
+            result(FlutterError(code: SoundStreamErrors.failedToWriteBuffer.rawValue,
                                 message: "Failed to write Player buffer",
                                 details: nil))
             return
