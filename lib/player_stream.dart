@@ -1,4 +1,4 @@
-part of sound_stream;
+part of flutter_sound_stream_plus;
 
 class PlayerStream {
   static final PlayerStream _instance = PlayerStream._internal();

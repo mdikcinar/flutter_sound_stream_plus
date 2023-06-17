@@ -1,4 +1,4 @@
-part of sound_stream;
+part of flutter_sound_stream_plus;
 
 class RecorderStream {
   static final RecorderStream _instance = RecorderStream._internal();

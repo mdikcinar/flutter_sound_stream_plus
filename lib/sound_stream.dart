@@ -1,4 +1,4 @@
-library sound_stream;
+library flutter_sound_stream_plus;
 
 import 'dart:async';
 import 'dart:typed_data';
