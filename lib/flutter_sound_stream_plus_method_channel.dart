@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_sound_stream_plus/sound_stream.dart';
 
 import 'flutter_sound_stream_plus_platform_interface.dart';
 
@@ -39,10 +40,12 @@ class MethodChannelFlutterSoundStreamPlus extends FlutterSoundStreamPlusPlatform
   Future<void> initializePlayer({
     int sampleRate = 16000,
     bool showLogs = false,
+    PlayerStreamAudioPort playerStreamAudioPort = PlayerStreamAudioPort.speaker,
   }) async {
     await methodChannel.invokeMethod("initializePlayer", {
       "sampleRate": sampleRate,
       "showLogs": showLogs,
+      "audioPort": playerStreamAudioPort.name,
     });
   }
 
@@ -67,8 +70,8 @@ class MethodChannelFlutterSoundStreamPlus extends FlutterSoundStreamPlusPlatform
   }
 
   @override
-  Future<bool?> startRecorder() => methodChannel.invokeMethod("startRecorder");
+  Future<bool?> startRecording() => methodChannel.invokeMethod("startRecording");
 
   @override
-  Future<bool?> stopRecorder() => methodChannel.invokeMethod("stopRecorder");
+  Future<bool?> stopRecording() => methodChannel.invokeMethod("startRecording");
 }

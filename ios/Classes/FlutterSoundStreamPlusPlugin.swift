@@ -195,6 +195,12 @@ public class FlutterSoundStreamPlusPlugin: NSObject, FlutterPlugin {
         }
         mRecordSampleRate = argsArr["sampleRate"] as? Double ?? mRecordSampleRate
         debugLogging = argsArr["showLogs"] as? Bool ?? debugLogging
+        let audioPort = argsArr["audioPort"] as? String ?? "speaker"
+        do {
+            try AVAudioSession.sharedInstance().overrideOutputAudioPort((audioPort == "speaker") ? .speaker : .none)
+        } catch {
+            debugPrint("error overriding OutputAudioPort")
+        }
         mRecordFormat = AVAudioFormat(commonFormat: AVAudioCommonFormat.pcmFormatInt16, sampleRate: mRecordSampleRate, channels: 1, interleaved: true)
 
         checkAndRequestPermission { isGranted in

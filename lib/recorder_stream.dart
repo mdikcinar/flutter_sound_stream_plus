@@ -25,10 +25,10 @@ class RecorderStream {
 
   /// Start recording. Recorder will start pushing audio chunks (PCM 16bit data)
   /// to audio stream as Uint8List
-  Future<dynamic> start() => FlutterSoundStreamPlusPlatform.instance.startRecorder();
+  Future<dynamic> start() => FlutterSoundStreamPlusPlatform.instance.startRecording();
 
   /// Recorder will stop recording and sending audio chunks to the [audioStream].
-  Future<dynamic> stop() => FlutterSoundStreamPlusPlatform.instance.stopRecorder();
+  Future<dynamic> stop() => FlutterSoundStreamPlusPlatform.instance.stopRecording();
 
   /// Current status of the [RecorderStream]
   Stream<SoundStreamStatus> get status => _recorderStatusController.stream;

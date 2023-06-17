@@ -1,3 +1,4 @@
+import 'package:flutter_sound_stream_plus/sound_stream.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'flutter_sound_stream_plus_method_channel.dart';
@@ -31,6 +32,7 @@ abstract class FlutterSoundStreamPlusPlatform extends PlatformInterface {
   Future<void> initializePlayer({
     int sampleRate = 16000,
     bool showLogs = false,
+    PlayerStreamAudioPort playerStreamAudioPort = PlayerStreamAudioPort.speaker,
   });
 
   Future<bool?> startPlayer();
@@ -44,7 +46,7 @@ abstract class FlutterSoundStreamPlusPlatform extends PlatformInterface {
     bool showLogs = false,
   });
 
-  Future<bool?> startRecorder();
+  Future<bool?> startRecording();
 
-  Future<bool?> stopRecorder();
+  Future<bool?> stopRecording();
 }

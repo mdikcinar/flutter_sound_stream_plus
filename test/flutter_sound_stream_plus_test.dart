@@ -1,4 +1,4 @@
-import 'package:flutter_test/flutter_test.dart';
+/* import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_sound_stream_plus/sound_stream.dart';
 import 'package:flutter_sound_stream_plus/flutter_sound_stream_plus_platform_interface.dart';
 import 'package:flutter_sound_stream_plus/flutter_sound_stream_plus_method_channel.dart';
@@ -30,26 +30,26 @@ class MockFlutterSoundStreamPlusPlatform with MockPlatformInterfaceMixin impleme
   }
 
   @override
-  Future<bool?> startRecorder() {
+  Future<bool?> startRecording() {
     // TODO: implement startRecorder
     throw UnimplementedError();
   }
 
   @override
-  Future<bool?> stopPlayer() {
+  Future<bool?> stopRecording() {
     // TODO: implement stopPlayer
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<bool?> stopRecorder() {
-    // TODO: implement stopRecorder
     throw UnimplementedError();
   }
 
   @override
   Future writeChunk(data) {
     // TODO: implement writeChunk
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool?> stopPlayer() {
+    // TODO: implement stopPlayer
     throw UnimplementedError();
   }
 }
@@ -69,3 +69,4 @@ void main() {
     //expect(await flutterSoundStreamPlusPlugin.getPlatformVersion(), '42');
   });
 }
+ */

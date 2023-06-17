@@ -18,10 +18,15 @@ class PlayerStream {
   }
 
   /// Initialize Player with specified [sampleRate]
-  Future<dynamic> initialize({int sampleRate = 16000, bool showLogs = false}) =>
+  Future<dynamic> initialize({
+    int sampleRate = 16000,
+    bool showLogs = false,
+    PlayerStreamAudioPort playerStreamAudioPort = PlayerStreamAudioPort.speaker,
+  }) =>
       FlutterSoundStreamPlusPlatform.instance.initializePlayer(
         sampleRate: sampleRate,
         showLogs: showLogs,
+        playerStreamAudioPort: playerStreamAudioPort,
       );
 
   /// Player will start receiving audio chunks (PCM 16bit data)
@@ -62,4 +67,9 @@ class PlayerStream {
     _playerStatusController.close();
     _audioStreamController.close();
   }
+}
+
+enum PlayerStreamAudioPort {
+  speaker,
+  earpiece,
 }
