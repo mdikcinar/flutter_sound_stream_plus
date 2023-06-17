@@ -23,7 +23,28 @@ abstract class FlutterSoundStreamPlusPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<String?> getPlatformVersion() {
-    throw UnimplementedError('platformVersion() has not been implemented.');
-  }
+  void setMethodCallHandler({
+    Function(dynamic event)? recorderEventListener,
+    Function(dynamic event)? playerEventListener,
+  });
+
+  Future<void> initializePlayer({
+    int sampleRate = 16000,
+    bool showLogs = false,
+  });
+
+  Future<bool?> startPlayer();
+
+  Future<bool?> stopPlayer();
+
+  Future<dynamic> writeChunk(dynamic data);
+
+  Future<void> initializeRecorder({
+    int sampleRate = 16000,
+    bool showLogs = false,
+  });
+
+  Future<bool?> startRecorder();
+
+  Future<bool?> stopRecorder();
 }
