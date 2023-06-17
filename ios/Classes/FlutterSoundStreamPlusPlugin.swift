@@ -197,7 +197,20 @@ public class FlutterSoundStreamPlusPlugin: NSObject, FlutterPlugin {
         debugLogging = argsArr["showLogs"] as? Bool ?? debugLogging
         let audioPort = argsArr["audioPort"] as? String ?? "speaker"
         do {
-            try AVAudioSession.sharedInstance().overrideOutputAudioPort((audioPort == "speaker") ? .speaker : .none)
+            if audioPort == "speaker" {
+                let audioSession = AVAudioSession.sharedInstance()
+                if audioSession.isOtherAudioPlaying {
+                    try audioSession.setCategory(.playAndRecord, mode: .voiceChat, options: .allowBluetooth)
+                    try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
+                    try audioSession.setPreferredSampleRate(44100)
+                    try audioSession.setMode(.voiceChat)
+                } else {
+                    try audioSession.setCategory(.playAndRecord, mode: .voiceChat, options: .allowBluetooth)
+                    try audioSession.setActive(true)
+                }
+                try audioSession.overrideOutputAudioPort(.speaker)
+            }
+
         } catch {
             debugPrint("error overriding OutputAudioPort")
         }
