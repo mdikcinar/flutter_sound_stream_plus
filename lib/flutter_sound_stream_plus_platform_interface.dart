@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_sound_stream_plus/sound_stream.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
@@ -23,6 +25,8 @@ abstract class FlutterSoundStreamPlusPlatform extends PlatformInterface {
     PlatformInterface.verifyToken(instance, _token);
     _instance = instance;
   }
+
+  StreamController<dynamic> get eventsStreamController;
 
   void setMethodCallHandler({
     Function(dynamic event)? recorderEventListener,

@@ -12,6 +12,11 @@ class MethodChannelFlutterSoundStreamPlus extends FlutterSoundStreamPlusPlatform
   @visibleForTesting
   final methodChannel = const MethodChannel('flutter_sound_stream_plus');
 
+  final _eventsStreamController = StreamController<dynamic>.broadcast();
+
+  @override
+  StreamController<dynamic> get eventsStreamController => _eventsStreamController;
+
   @override
   void setMethodCallHandler({
     Function(dynamic event)? recorderEventListener,
@@ -21,14 +26,9 @@ class MethodChannelFlutterSoundStreamPlus extends FlutterSoundStreamPlusPlatform
       (call) {
         switch (call.method) {
           case "recorderEvent":
-            recorderEventListener?.call(call.arguments);
-            break;
           case "playerEvent":
-            playerEventListener?.call(call.arguments);
-            break;
           case "platformEvent":
-            recorderEventListener?.call(call.arguments);
-            playerEventListener?.call(call.arguments);
+            _eventsStreamController.add(call.arguments);
             break;
         }
         return Future.value(null);
@@ -73,5 +73,5 @@ class MethodChannelFlutterSoundStreamPlus extends FlutterSoundStreamPlusPlatform
   Future<bool?> startRecording() => methodChannel.invokeMethod("startRecording");
 
   @override
-  Future<bool?> stopRecording() => methodChannel.invokeMethod("startRecording");
+  Future<bool?> stopRecording() => methodChannel.invokeMethod("stopRecording");
 }

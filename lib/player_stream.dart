@@ -6,11 +6,10 @@ class PlayerStream {
 
   final _playerStatusController = StreamController<SoundStreamStatus>.broadcast();
   final _audioStreamController = StreamController<Uint8List>();
+  late final StreamSubscription<dynamic>? _eventSubscription;
 
   PlayerStream._internal() {
-    FlutterSoundStreamPlusPlatform.instance.setMethodCallHandler(
-      playerEventListener: _eventListener,
-    );
+    _eventSubscription = FlutterSoundStreamPlusPlatform.instance.eventsStreamController.stream.listen(_eventListener);
     _playerStatusController.add(SoundStreamStatus.unset);
     _audioStreamController.stream.listen((data) {
       writeChunk(data);
@@ -64,6 +63,7 @@ class PlayerStream {
   /// Only call this method if you don't want to use this anymore
   void dispose() {
     stop();
+    _eventSubscription?.cancel();
     _playerStatusController.close();
     _audioStreamController.close();
   }

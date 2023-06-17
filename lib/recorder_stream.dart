@@ -5,13 +5,11 @@ class RecorderStream {
   factory RecorderStream() => _instance;
 
   final _audioStreamController = StreamController<Uint8List>.broadcast();
-
   final _recorderStatusController = StreamController<SoundStreamStatus>.broadcast();
+  late final StreamSubscription<dynamic>? _eventSubscription;
 
   RecorderStream._internal() {
-    FlutterSoundStreamPlusPlatform.instance.setMethodCallHandler(
-      recorderEventListener: _eventListener,
-    );
+    _eventSubscription = FlutterSoundStreamPlusPlatform.instance.eventsStreamController.stream.listen(_eventListener);
     _recorderStatusController.add(SoundStreamStatus.unset);
     _audioStreamController.add(Uint8List(0));
   }
@@ -58,6 +56,7 @@ class RecorderStream {
   /// Only call this method if you don't want to use this anymore
   void dispose() {
     stop();
+    _eventSubscription?.cancel();
     _recorderStatusController.close();
     _audioStreamController.close();
   }
