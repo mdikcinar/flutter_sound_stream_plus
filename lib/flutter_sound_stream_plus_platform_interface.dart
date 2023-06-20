@@ -28,10 +28,7 @@ abstract class FlutterSoundStreamPlusPlatform extends PlatformInterface {
 
   StreamController<dynamic> get eventsStreamController;
 
-  void setMethodCallHandler({
-    Function(dynamic event)? recorderEventListener,
-    Function(dynamic event)? playerEventListener,
-  });
+  void setMethodCallHandler();
 
   Future<void> initializePlayer({
     int sampleRate = 16000,

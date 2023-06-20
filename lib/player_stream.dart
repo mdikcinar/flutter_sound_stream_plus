@@ -9,6 +9,7 @@ class PlayerStream {
   late final StreamSubscription<dynamic>? _eventSubscription;
 
   PlayerStream._internal() {
+    FlutterSoundStreamPlusPlatform.instance.setMethodCallHandler();
     _eventSubscription = FlutterSoundStreamPlusPlatform.instance.eventsStreamController.stream.listen(_eventListener);
     _playerStatusController.add(SoundStreamStatus.unset);
     _audioStreamController.stream.listen((data) {

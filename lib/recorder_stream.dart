@@ -9,6 +9,7 @@ class RecorderStream {
   late final StreamSubscription<dynamic>? _eventSubscription;
 
   RecorderStream._internal() {
+    FlutterSoundStreamPlusPlatform.instance.setMethodCallHandler();
     _eventSubscription = FlutterSoundStreamPlusPlatform.instance.eventsStreamController.stream.listen(_eventListener);
     _recorderStatusController.add(SoundStreamStatus.unset);
     _audioStreamController.add(Uint8List(0));

@@ -52,7 +52,7 @@ public class FlutterSoundStreamPlusPlugin: NSObject, FlutterPlugin {
     // MARK: Init
 
     public static func register(with registrar: FlutterPluginRegistrar) {
-        let channel = FlutterMethodChannel(name: "flutter_sound_stream_plus", binaryMessenger: registrar.messenger())
+        let channel = FlutterMethodChannel(name: "com.mdikcinar.flutter_sound_stream_plus", binaryMessenger: registrar.messenger())
         let instance = FlutterSoundStreamPlusPlugin(channel)
         registrar.addMethodCallDelegate(instance, channel: channel)
     }
@@ -199,15 +199,6 @@ public class FlutterSoundStreamPlusPlugin: NSObject, FlutterPlugin {
         do {
             if audioPort == "speaker" {
                 let audioSession = AVAudioSession.sharedInstance()
-                if audioSession.isOtherAudioPlaying {
-                    try audioSession.setCategory(.playAndRecord, mode: .voiceChat, options: .allowBluetooth)
-                    try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
-                    try audioSession.setPreferredSampleRate(44100)
-                    try audioSession.setMode(.voiceChat)
-                } else {
-                    try audioSession.setCategory(.playAndRecord, mode: .voiceChat, options: .allowBluetooth)
-                    try audioSession.setActive(true)
-                }
                 try audioSession.overrideOutputAudioPort(.speaker)
             }
 

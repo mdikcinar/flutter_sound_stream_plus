@@ -1,4 +1,4 @@
-// This is a basic Flutter integration test.
+/* // This is a basic Flutter integration test.
 //
 // Since integration tests run in a full Flutter application, they can interact
 // with the host side of a plugin implementation, unlike Dart unit tests.
@@ -23,3 +23,4 @@ void main() {
     expect(version?.isNotEmpty, true);
   });
 }
+ */

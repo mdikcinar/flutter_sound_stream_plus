@@ -10,7 +10,7 @@ import 'flutter_sound_stream_plus_platform_interface.dart';
 class MethodChannelFlutterSoundStreamPlus extends FlutterSoundStreamPlusPlatform {
   /// The method channel used to interact with the native platform.
   @visibleForTesting
-  final methodChannel = const MethodChannel('flutter_sound_stream_plus');
+  final methodChannel = const MethodChannel('com.mdikcinar.flutter_sound_stream_plus');
 
   final _eventsStreamController = StreamController<dynamic>.broadcast();
 
@@ -18,10 +18,7 @@ class MethodChannelFlutterSoundStreamPlus extends FlutterSoundStreamPlusPlatform
   StreamController<dynamic> get eventsStreamController => _eventsStreamController;
 
   @override
-  void setMethodCallHandler({
-    Function(dynamic event)? recorderEventListener,
-    Function(dynamic event)? playerEventListener,
-  }) {
+  void setMethodCallHandler() {
     methodChannel.setMethodCallHandler(
       (call) {
         switch (call.method) {
