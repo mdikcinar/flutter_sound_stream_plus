@@ -1,4 +1,4 @@
-package com.mdikcinar.sound_stream.flutter_sound_stream_plus
+package com.mdikcinar.flutter_sound_stream_plus
 
 import android.content.Context
 import android.Manifest
@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
@@ -47,7 +48,7 @@ enum class EventType {
 
 /** FlutterSoundStreamPlusPlugin */
 class FlutterSoundStreamPlusPlugin: FlutterPlugin, MethodCallHandler, PluginRegistry.RequestPermissionsResultListener,
-        ActivityAware {
+      ActivityAware {
   /// The MethodChannel that will the communication between Flutter and native Android
   ///
   /// This local reference serves to register the plugin with the Flutter Engine and unregister it
@@ -92,7 +93,7 @@ class FlutterSoundStreamPlusPlugin: FlutterPlugin, MethodCallHandler, PluginRegi
   @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
     try {
-      when (call.method) {
+        when (call.method) {
         "hasPermission" -> hasPermission(result)
         "initializeRecorder" -> initializeRecorder(call, result)
         "startRecording" -> startRecording(result)
@@ -103,15 +104,40 @@ class FlutterSoundStreamPlusPlugin: FlutterPlugin, MethodCallHandler, PluginRegi
         "writeChunk" -> writeChunk(call, result)
         else -> result.notImplemented()
       }
-    } catch (e: Exception) {
-      result.error(SoundStreamErrors.unknown.name,
-              "Unexpected exception", e.localizedMessage)
     }
+    catch(e: Exception) {
+      Log.e(logTag, "Unexpected exception", e)
+      result.error(SoundStreamErrors.unknown.name,
+                    "Unexpected exception", e.localizedMessage)    }
   }
 
   override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
     channel.setMethodCallHandler(null)
+    mListener?.onMarkerReached(null)
+    mListener?.onPeriodicNotification(null)
+    mListener = null
+    mRecorder?.stop()
+    mRecorder?.release()
+    mRecorder = null
   }
+
+  override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
+      currentActivity = binding.activity
+      binding.addRequestPermissionsResultListener(this)
+  }
+
+  override fun onDetachedFromActivity() {
+
+  }
+
+  override fun onAttachedToActivity(binding: ActivityPluginBinding) {
+      currentActivity = binding.activity
+      binding.addRequestPermissionsResultListener(this)
+  }
+
+  override fun onDetachedFromActivityForConfigChanges() {
+  }
+
 
   private fun debugLog(msg: String) {
     if (debugLogging) {
@@ -223,7 +249,7 @@ class FlutterSoundStreamPlusPlugin: FlutterPlugin, MethodCallHandler, PluginRegi
 
   private fun startRecording(result: Result) {
     try {
-      if (mRecorder!!.recordingState == AudioRecord.RECORDSTATE_RECORDING) {
+      if (mRecorder?.recordingState == AudioRecord.RECORDSTATE_RECORDING) {
         result.success(true)
         return
       }
@@ -234,6 +260,7 @@ class FlutterSoundStreamPlusPlugin: FlutterPlugin, MethodCallHandler, PluginRegi
     } catch (e: IllegalStateException) {
       debugLog("record() failed")
       result.error(SoundStreamErrors.failedToRecord.name, "Failed to start recording", e.localizedMessage)
+      throw e
     }
   }
 
@@ -249,6 +276,7 @@ class FlutterSoundStreamPlusPlugin: FlutterPlugin, MethodCallHandler, PluginRegi
     } catch (e: IllegalStateException) {
       debugLog("record() failed")
       result.error(SoundStreamErrors.failedToRecord.name, "Failed to start recording", e.localizedMessage)
+      throw e
     }
   }
 
@@ -302,6 +330,7 @@ class FlutterSoundStreamPlusPlugin: FlutterPlugin, MethodCallHandler, PluginRegi
       result.success(true)
     } catch (e: Exception) {
       result.error(SoundStreamErrors.failedToWriteBuffer.name, "Failed to write Player buffer", e.localizedMessage)
+      throw e
     }
   }
 
@@ -317,6 +346,7 @@ class FlutterSoundStreamPlusPlugin: FlutterPlugin, MethodCallHandler, PluginRegi
       result.success(true)
     } catch (e: Exception) {
       result.error(SoundStreamErrors.failedToPlay.name, "Failed to start Player", e.localizedMessage)
+      throw e
     }
   }
 
@@ -329,6 +359,7 @@ class FlutterSoundStreamPlusPlugin: FlutterPlugin, MethodCallHandler, PluginRegi
       result.success(true)
     } catch (e: Exception) {
       result.error(SoundStreamErrors.failedToStop.name, "Failed to stop Player", e.localizedMessage)
+      throw e
     }
   }
 
@@ -357,6 +388,6 @@ class FlutterSoundStreamPlusPlugin: FlutterPlugin, MethodCallHandler, PluginRegi
       }
     }
 
-
-
   }
+
+}

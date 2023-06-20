@@ -26,7 +26,7 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-    namespace "com.mdikcinar.sound_stream.flutter_sound_stream_plus_example"
+    namespace "com.mdikcinar.flutter_sound_stream_plus_example"
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
