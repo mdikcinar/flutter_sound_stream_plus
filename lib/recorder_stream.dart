@@ -50,6 +50,9 @@ class RecorderStream {
           orElse: () => SoundStreamStatus.unset,
         ));
         break;
+      case "debugPrint":
+        log(event["data"], name: "RecorderStream");
+        break;
     }
   }
 

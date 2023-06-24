@@ -57,6 +57,9 @@ class PlayerStream {
           orElse: () => SoundStreamStatus.unset,
         ));
         break;
+      case "debugPrint":
+        log(event["data"], name: "PlayerStream");
+        break;
     }
   }
 
