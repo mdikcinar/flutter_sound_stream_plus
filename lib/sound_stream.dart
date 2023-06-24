@@ -1,6 +1,7 @@
 library flutter_sound_stream_plus;
 
 import 'dart:async';
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'flutter_sound_stream_plus_platform_interface.dart';
@@ -25,5 +26,5 @@ enum SoundStreamStatus {
   unset,
   initialized,
   playing,
-  topped,
+  stopped,
 }
