@@ -315,7 +315,9 @@ public class FlutterSoundStreamPlusPlugin: NSObject, FlutterPlugin {
             buffer,
             from: mPlayerInputFormat,
             to: mPlayerOutputFormat
-        ))
+        ), completionHandler: {
+            self.sendPlayerStatus(SoundStreamStatus.stopped)
+        })
         result(true)
     }
 }
